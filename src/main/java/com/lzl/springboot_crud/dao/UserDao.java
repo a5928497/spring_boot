@@ -34,13 +34,17 @@ public class UserDao {
         return this.users.get(id);
     }
 
-    public void addUser(User user){
-        id=++this.id;
-        user.setId(id);
-        user.setCreateTime(new Date());
+    public void saveUser(User user){
         Role role =  user.getRole();
         role.setRoleName(roleDao.getRole(role.getId()));
-        users.put(id,user);
+        if(user.getId()==null){
+            id=++this.id;
+            user.setId(id);
+            user.setCreateTime(new Date());
+            users.put(id,user);
+            return;
+        }
+        users.put(user.getId(),user);
     }
 
     public void removeUser(Integer id){

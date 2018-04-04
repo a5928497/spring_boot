@@ -18,10 +18,12 @@ public class UserController {
     @Autowired
     private RoleDao roleDao;
 
-//    @ModelAttribute
-//    public void getUser(@RequestParam(value = "id",required = false) Integer id, Map<String,Object> map){
-//        if(id==null)
-//    }
+    @ModelAttribute
+    public void getUser(@RequestParam(value = "id",required = false) Integer id, Map<String,Object> map){
+        if(id!=null){
+            map.put("user",userDao.getUser(id));
+        }
+    }
     @RequestMapping("/users")
     public String listUsers(Map<String,Object> map) {
        map.put("users",userDao.getUsers());
@@ -36,7 +38,7 @@ public class UserController {
     @PostMapping("/user")
     public String addUser(User user){
         System.out.println(user);
-        userDao.addUser(user);
+        userDao.saveUser(user);
         return "redirect:/users";
     }
 
@@ -46,4 +48,17 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/user/{id}")
+    public String toEditUser(@PathVariable("id") Integer id,Map<String,Object> map){
+        map.put("user",userDao.getUser(id));
+        map.put("roles",roleDao.getRoles());
+        return "input";
+    }
+
+    @PutMapping("/user")
+    public String editUser(User user){
+        System.out.println(user);
+        userDao.saveUser(user);
+        return "redirect:/users";
+    }
 }

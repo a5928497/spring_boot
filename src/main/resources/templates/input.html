@@ -5,12 +5,19 @@
     <title>Input</title>
 </head>
 <body>
-    <form action="/user" method="post">
+    <form action="/user" method="post" modelAttribute="user">
         <label>Username:</label>
-        <input name="userName" type="text"/><br>
-        <label>Username</label>Role:
-        <select name="role.id">
-            <option th:each="role:${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+        <!--若为修改，加入用户id-->
+        <input type="hidden" th:name="id" th:value="${user!=null}?${user.id}" />
+        <!--若为修改，插入put隐藏域-->
+        <input type="hidden" th:name="_method" th:value="put" th:if="${user!=null}"/>
+        <!--若为修改，则回显用户名-->
+        <input name="userName" type="text" th:value="${user!=null}?${user.userName}" /><br>
+        <!--若为修改，默认选中用户角色-->
+        <label>Role:</label>
+        <select name="role.id" >
+            <option th:each="role:${roles}" th:value="${role.id}" th:text="${role.roleName}"
+                th:selected="${user!= null}?${role.id == user.role.id}"    ></option>
         </select><br>
         <input type="submit" value="Submit">
     </form>

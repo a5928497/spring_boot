@@ -23,9 +23,11 @@
                 <td th:text="${user.id}">ID</td>
                 <td th:text="${user.userName}">Username</td>
                 <td th:text="${user.role.roleName}">Role</td>
-                <td th:text="${user.createTime}">CreateTime</td>
+                <td th:text="${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm')}">CreateTime</td>
                 <td>
-                    <a href=""><button >Edit</button></a>
+                    <!-- get方式-->
+                    <a href="" th:href="@{/user/}+${user.id}"><button >Edit</button></a>
+                    <!-- delete方式-->
                     <button class="deleteBTN" th:attr="del_uri = @{/user/}+${user.id}">Delete</button>
                 </td>
             </tr>
