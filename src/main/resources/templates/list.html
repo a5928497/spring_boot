@@ -5,7 +5,9 @@
     <title>AllUsers</title>
 </head>
 <body>
-    <h1>测试</h1>
+    <a href="/toAdd">
+        <button>Add User</button>
+    </a>
     <table border="1" cellpadding="10" cellspacing="0">
         <thead>
             <tr>
@@ -13,6 +15,7 @@
                 <td>Username</td>
                 <td>Role</td>
                 <td>CreateTime</td>
+                <td>Options</td>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +24,10 @@
                 <td th:text="${user.userName}">Username</td>
                 <td th:text="${user.role.roleName}">Role</td>
                 <td th:text="${user.createTime}">CreateTime</td>
+                <td>
+                    <a href=""><button >Edit</button></a>
+                    <a href=""><button >Delete</button></a>
+                </td>
             </tr>
         </tbody>
     </table>

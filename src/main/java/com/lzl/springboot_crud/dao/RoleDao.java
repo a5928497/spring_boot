@@ -22,8 +22,8 @@ public class RoleDao {
         return this.roles.values();
     }
 
-    public Role getRole(Integer id){
-        return this.roles.get(id);
+    public String getRole(Integer id){
+        return this.roles.get(id).getRoleName();
     }
 
 

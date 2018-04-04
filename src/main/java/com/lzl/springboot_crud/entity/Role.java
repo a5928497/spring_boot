@@ -4,6 +4,9 @@ public class Role {
     private Integer id;
     private String roleName;
 
+    public Role() {
+    }
+
     public Role(Integer id, String roleName) {
         this.id = id;
         this.roleName = roleName;

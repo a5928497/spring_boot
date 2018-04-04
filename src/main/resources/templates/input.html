@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Input</title>
+</head>
+<body>
+    <form action="/add">
+        <label>Username:</label>
+        <input name="userName" type="text"/><br>
+        <label>Username</label>Role:
+        <select name="role.id">
+            <option th:each="role:${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+        </select><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
