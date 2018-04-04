@@ -5,10 +5,7 @@ import com.lzl.springboot_crud.dao.UserDao;
 import com.lzl.springboot_crud.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -30,12 +27,12 @@ public class UserController {
        return "list";
     }
 
-    @RequestMapping("/toAdd")
+    @GetMapping("/user")
     public String toAddUser(Map<String,Object> map){
         map.put("roles",roleDao.getRoles());
         return "input";
     }
-    @RequestMapping("/add")
+    @PostMapping("/user")
     public String addUser(User user){
         System.out.println(user);
         userDao.addUser(user);
