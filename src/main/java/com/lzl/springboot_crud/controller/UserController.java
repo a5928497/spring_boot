@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.Map;
 
 @Controller
@@ -36,6 +37,12 @@ public class UserController {
     public String addUser(User user){
         System.out.println(user);
         userDao.addUser(user);
+        return "redirect:/users";
+    }
+
+    @DeleteMapping("/user/{id}")
+    public String deleteUser(@PathVariable("id") Integer id){
+        userDao.removeUser(id);
         return "redirect:/users";
     }
 

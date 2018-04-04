@@ -26,10 +26,24 @@
                 <td th:text="${user.createTime}">CreateTime</td>
                 <td>
                     <a href=""><button >Edit</button></a>
-                    <a href=""><button >Delete</button></a>
+                    <button class="deleteBTN" th:attr="del_uri = @{/user/}+${user.id}">Delete</button>
                 </td>
             </tr>
         </tbody>
     </table>
+    <!-- delete表单-->
+    <form id="deleteForm" method="post">
+        <input type="hidden" name="_method" value="delete" >
+    </form>
+    <script type="text/javascript" src="" th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
+    <script>
+        $deleteBTNs = $(".deleteBTN");
+        $deleteForm = $("#deleteForm");
+        $deleteBTNs.click(function () {
+            // alert($(this).attr("del_uri"));
+            $deleteForm.attr("action",$(this).attr("del_uri")).submit();
+            return false;
+        });
+    </script>
 </body>
 </html>

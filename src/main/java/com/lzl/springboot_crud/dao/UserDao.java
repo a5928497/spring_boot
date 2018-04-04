@@ -43,6 +43,10 @@ public class UserDao {
         users.put(id,user);
     }
 
+    public void removeUser(Integer id){
+        users.remove(id);
+    }
+
     public static void main(String[] args) {
         System.out.println(new UserDao().getUser(1).toString());
     }
