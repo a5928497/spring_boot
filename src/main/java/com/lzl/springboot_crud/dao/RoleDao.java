@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Repository
-public class RoleDao {
+public class RoleDao{
     private static Map<Integer,Role> roles;
     static {
         roles = new HashMap<>();
