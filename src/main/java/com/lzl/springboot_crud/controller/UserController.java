@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -23,8 +24,11 @@ public class UserController {
     @ModelAttribute
     public void getUser(@RequestParam(value = "id",required = false) Integer id, Map<String,Object> map){
         if(id!=null){
-            map.put("user",userService.findById(id));
+            User user = userService.findById(id);
+            user.setRole(null);
+            map.put("user",user);
         }
+
     }
     @RequestMapping("/users")
     public String listUsers(Map<String,Object> map) {
@@ -39,6 +43,7 @@ public class UserController {
     }
     @PostMapping("/user")
     public String addUser(User user){
+        user.setCreateTime(new Date());
         System.out.println(user);
         userService.saveUser(user);
         return "redirect:/users";
