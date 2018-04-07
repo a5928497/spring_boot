@@ -1,12 +1,23 @@
 package com.lzl.springboot_crud.entity;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Table(name = "USERS")
+@Entity
 public class User {
+    @Column(name = "USER_NAME")
     private String userName;
+    @GeneratedValue
+    @Id
     private Integer id;
+    @JoinColumn(name = "ROLE_ID")
+    @ManyToOne
     private Role role;
+    @Column(name = "CREATE_TIME")
     private Date createTime;
+
+    public User() {
+    }
 
     public User(String userName, Integer id, Role role, Date createTime) {
         this.userName = userName;

@@ -1,7 +1,14 @@
 package com.lzl.springboot_crud.entity;
 
+import javax.persistence.*;
+
+@Table(name = "ROLES")
+@Entity
 public class Role {
+    @GeneratedValue
+    @Id
     private Integer id;
+    @Column(name = "ROLE_NAME")
     private String roleName;
 
     public Role() {
