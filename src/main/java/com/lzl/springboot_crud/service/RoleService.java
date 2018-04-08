@@ -19,7 +19,7 @@ public class RoleService {
     }
     @Transactional
     public void addRole(Role role) {
-        roleRepository.save(role);
+        roleRepository.saveAndFlush(role);
     }
 
     @Transactional(readOnly = true)

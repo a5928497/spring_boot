@@ -4,9 +4,7 @@ import com.lzl.springboot_crud.entity.Role;
 import com.lzl.springboot_crud.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -14,7 +12,16 @@ import java.util.Map;
 public class RoleController {
     @Autowired
     private RoleService roleService;
+//    @ModelAttribute
+//    public void getRole(@RequestParam("id") Integer id,Map<String,Object> map){
+//
+//        }
 
+    @PutMapping("role")
+    public String editRole(Role role){
+        roleService.addRole(role);
+        return "redirect:/roles";
+    }
     @GetMapping("/role/{id}")
     public String toEdit(@PathVariable("id") Integer id,Map<String,Object> map){
         System.out.println(roleService.findById(id));
@@ -37,6 +44,6 @@ public class RoleController {
     public String addRole(Role role){
         System.out.println(role);
         roleService.addRole(role);
-        return "roles/list";
+        return "redirect:/roles";
     }
 }
