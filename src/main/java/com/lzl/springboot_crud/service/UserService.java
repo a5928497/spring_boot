@@ -22,7 +22,7 @@ public class UserService {
     public void saveUser(User user){
         userRepository.saveAndFlush(user);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> findAll(){
         return userRepository.findAll();
     }
@@ -33,7 +33,7 @@ public class UserService {
         }
         userRepository.saveAndFlush(user);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public User findById(Integer id){
         return userRepository.findById(id).get();
     }

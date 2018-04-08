@@ -17,7 +17,7 @@ public class RoleService {
     public void deleteById(Integer id) {
         roleRepository.deleteById(id);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public Role findById(Integer id){
         return roleRepository.findById(id).get();
     }
