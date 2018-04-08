@@ -16,7 +16,11 @@ public class RoleController {
 //    public void getRole(@RequestParam("id") Integer id,Map<String,Object> map){
 //
 //        }
-
+    @DeleteMapping("role/{id}")
+    public String deleteRole(@PathVariable("id") Integer id) {
+        roleService.deleteById(id);
+        return "redirect:/roles";
+    }
     @PutMapping("role")
     public String editRole(Role role){
         roleService.addRole(role);

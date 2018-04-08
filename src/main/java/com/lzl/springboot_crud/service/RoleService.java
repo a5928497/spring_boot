@@ -14,6 +14,10 @@ public class RoleService {
     private RoleRepository roleRepository;
 
     @Transactional
+    public void deleteById(Integer id) {
+        roleRepository.deleteById(id);
+    }
+    @Transactional
     public Role findById(Integer id){
         return roleRepository.findById(id).get();
     }
