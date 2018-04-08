@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>4xx Error Page</title>
 </head>
 <body>
-
+    <h3 th:text="错误提示：+${error}"></h3>
+    <h3 th:text="错误消息：+${message}"></h3>
+    <h3 th:text="错误对象：+${exception}"></h3>
+    <h3 th:text="状态码： + ${status}"></h3>
+    <h3 th:text="时间：+${timestamps}"></h3>
 </body>
 </html>
