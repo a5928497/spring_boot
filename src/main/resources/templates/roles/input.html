@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RoleInput</title>
+</head>
+<body>
+    <form action="/role" method="post" modelAttribute="role">
+        <label>Rolename:</label>
+        <!--若为修改，加入角色id-->
+        <input type="hidden" th:name="id" th:value="${role!=null}?${role.id}" />
+        <!--若为修改，插入put隐藏域-->
+        <input type="hidden" th:name="_method" th:value="put" th:if="${role!=null}"/>
+        <!--若为修改，则回显角色名-->
+        <input name="roleName" type="text" th:value="${role!=null}?${role.roleName}" /><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

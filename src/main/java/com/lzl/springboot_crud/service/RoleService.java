@@ -13,6 +13,15 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Transactional
+    public Role findById(Integer id){
+        return roleRepository.findById(id).get();
+    }
+    @Transactional
+    public void addRole(Role role) {
+        roleRepository.save(role);
+    }
+
     @Transactional(readOnly = true)
     public List<Role> getRoles() {
         return roleRepository.findAll();

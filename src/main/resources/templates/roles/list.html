@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AllUsers</title>
+</head>
+<body>
+    <a href="/role">
+        <button>Add Role</button>
+    </a>
+    <a href="/users">
+        <button>Users</button>
+    </a>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>RoleName</td>
+                <td>Options</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="role:${roles}">
+                <td th:text="${role.id}">ID</td>
+                <td th:text="${role.roleName}">Username</td>
+                <td>
+                    <!-- get方式-->
+                    <a href="" th:href="@{/role/}+${role.id}"><button >Edit</button></a>
+                    <!-- delete方式-->
+                    <button class="deleteBTN" th:attr="del_uri = @{/role/}+${role.id}">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- delete表单-->
+    <form id="deleteForm" method="post">
+        <input type="hidden" name="_method" value="delete" >
+    </form>
+    <script type="text/javascript" src="" th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
+    <script>
+        $deleteBTNs = $(".deleteBTN");
+        $deleteForm = $("#deleteForm");
+        $deleteBTNs.click(function () {
+            // alert($(this).attr("del_uri"));
+            $deleteForm.attr("action",$(this).attr("del_uri")).submit();
+            return false;
+        });
+    </script>
+</body>
+</html>

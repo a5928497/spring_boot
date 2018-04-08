@@ -33,13 +33,13 @@ public class UserController {
     @RequestMapping("/users")
     public String listUsers(Map<String,Object> map) {
        map.put("users",userService.findAll());
-       return "list";
+       return "users/list";
     }
 
     @GetMapping("/user")
     public String toAddUser(Map<String,Object> map){
         map.put("roles",roleService.getRoles());
-        return "input";
+        return "users/input";
     }
     @PostMapping("/user")
     public String addUser(User user){
@@ -59,7 +59,7 @@ public class UserController {
     public String toEditUser(@PathVariable("id") Integer id,Map<String,Object> map){
         map.put("user",userService.findById(id));
         map.put("roles",roleService.getRoles());
-        return "input";
+        return "users/input";
     }
 
     @PutMapping("/user")
