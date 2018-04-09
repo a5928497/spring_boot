@@ -18,13 +18,13 @@ public class UserDao {
 
     private static Map<Integer,User> users;
     private static Integer id;
-    static{
-        users = new HashMap<>();
-        id = 3;
-        users.put(1,new User("zhangsan",1,new Role(1,"VIP1"),new Date()));
-        users.put(2,new User("lisi",2,new Role(2,"VIP2"),new Date()));
-        users.put(3,new User("wangwu",3,new Role(1,"VIP3"),new Date()));
-    }
+//    static{
+//        users = new HashMap<>();
+//        id = 3;
+//        users.put(1,new User("zhangsan",1,new Role(1,"VIP1"),new Date()));
+//        users.put(2,new User("lisi",2,new Role(2,"VIP2"),new Date()));
+//        users.put(3,new User("wangwu",3,new Role(1,"VIP3"),new Date()));
+//    }
 
     public Collection getUsers() {
         return this.users.values();

@@ -22,7 +22,10 @@ public class UserController {
 //    private RoleDao roleDao;
 
     @ModelAttribute
-    public void getUser(@RequestParam(value = "id",required = false) Integer id, Map<String,Object> map){
+    public void getUser(@RequestParam(value = "id",required = false) Integer id,
+                        @RequestParam(value = "password",required = false) String password,
+                        Map<String,Object> map){
+
         if(id!=null){
             User user = userService.findById(id);
             user.setRole(null);

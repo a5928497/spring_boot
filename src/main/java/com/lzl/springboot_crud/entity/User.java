@@ -5,23 +5,29 @@ import java.util.Date;
 @Table(name = "USERS")
 @Entity
 public class User {
-    @Column(name = "USER_NAME")
-    private String userName;
     @GeneratedValue
     @Id
     private Integer id;
+
+    @Column(name = "USER_NAME")
+    private String userName;
+
+    @Column(name = "PASSWORD")
+    private String password;
+
     @JoinColumn(name = "ROLE_ID")
     @ManyToOne
     private Role role;
+
     @Column(name = "CREATE_TIME")
     private Date createTime;
 
     public User() {
     }
 
-    public User(String userName, Integer id, Role role, Date createTime) {
+    public User(String userName, String password, Role role, Date createTime) {
         this.userName = userName;
-        this.id = id;
+        this.password = password;
         this.role = role;
         this.createTime = createTime;
     }
@@ -61,8 +67,9 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + userName + '\'' +
-                ", id=" + id +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
                 ", role=" + role +
                 ", createTime=" + createTime +
                 '}';
