@@ -34,6 +34,14 @@ public class UserController {
 
 
     }
+
+    @ResponseBody
+    @PostMapping("/checkUsername")
+    public String checkUsername(@RequestParam("username") String username) {
+        System.out.println(username);
+        return userService.checkUsername(username) ;
+    }
+
     @RequestMapping("/users")
     public String listUsers(Map<String,Object> map) {
        map.put("users",userService.findAll());

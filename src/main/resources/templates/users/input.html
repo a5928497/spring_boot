@@ -8,17 +8,19 @@
     <form action="/user" method="post" modelAttribute="user" id="inputForm">
         <label>Username:</label>
         <!--若为修改，加入用户id-->
-        <input type="hidden" th:name="id" th:value="${user!=null}?${user.id}" />
+        <input type="hidden" id="userId" th:name="id" th:value="${user!=null}?${user.id}" />
         <!--若为修改，插入put隐藏域-->
         <input type="hidden" th:name="_method" th:value="put" th:if="${user!=null}"/>
         <!--若为修改，则回显用户名-->
-        <input name="userName" type="text" th:value="${user!=null}?${user.userName}" /><br>
+        <input name="userName" id="username" type="text" th:value="${user!=null}?${user.userName}" /><br>
+        <span id="user_msg_container"></span>
         <!--若为添加用户，需要用户填写密码-->
         <label th:if="${user==null}">密码：</label>
         <input type="password" id="password" name="password" th:if="${user==null}"/><br th:if="${user==null}">
         <!--若为添加用户，需要用户填写密码确认-->
         <label th:if="${user==null}">密码确认：</label>
         <input type="password" id="pswConfirm" th:if="${user==null}"/><br th:if="${user==null}">
+        <span id="psw_msg_container"></span>
         <!--若为修改，默认选中用户角色-->
         <label>Role:</label>
         <select name="role.id" >
@@ -32,13 +34,43 @@
         $submitBTN = $("#submit_BTN");
         $password = $("#password");
         $pswConfirm = $("#pswConfirm");
-        $form = $("#inputForm")
+        $username = $("#username");
+        $form = $("#inputForm");
+        $user_msg = $("#user_msg_container");
+        $psw_msg = $("#psw_msg_container");
+        $username.focus(function () {
+            //点击时移除msg
+            $user_msg.empty();
+        })
+        $password.focus(function () {
+            //点击时移除msg
+            $psw_msg.empty();
+        })
+        $pswConfirm.focus(function () {
+            //点击时移除msg
+           $psw_msg.empty();
+        })
+        $username.blur(function () {
+           //用户名是否可用
+            var username =$username.val();
+            $.post("/checkUsername",{username:username},function (data) {
+                if(data === ""){
+                    //若不存在
+                    $user_msg.html("用户名可用"+"<br>");
+                    $user_msg.css("color","green");
+                }else{
+                    $user_msg.html("用户名不可用"+"<br>");
+                    $user_msg.css("color","red");
+                }
+            })
+        })
         //提交前判定两次密码输入是否一致
         $submitBTN.click(function () {
             var isSame = $password.val() === $pswConfirm.val();
             if(!isSame){
             //若不一致
-                $pswConfirm.after("<br><span style='color: red'>两次密码输入必须一致</span>")
+                $psw_msg.html("两次输入密码必须一致"+"<br>");
+                $psw_msg.css("color","red");
             }else {
                 //若输入一致，提交
                 $form.submit();

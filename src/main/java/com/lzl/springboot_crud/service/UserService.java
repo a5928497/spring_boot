@@ -15,17 +15,26 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
+    public String checkUsername(String userName) {
+        System.out.println(userRepository.findByUserName(userName));
+        return userRepository.findByUserName(userName);
+    }
+
+    @Transactional
     public void deleteUser(Integer id){
         userRepository.deleteById(id);
     }
+
     @Transactional
     public void saveUser(User user){
         userRepository.saveAndFlush(user);
     }
+
     @Transactional(readOnly = true)
     public List<User> findAll(){
         return userRepository.findAll();
     }
+
     @Transactional
     public void addUser(User user){
         if(user.getCreateTime()==null){
@@ -33,6 +42,7 @@ public class UserService {
         }
         userRepository.saveAndFlush(user);
     }
+
     @Transactional(readOnly = true)
     public User findById(Integer id){
         return userRepository.findById(id).get();
