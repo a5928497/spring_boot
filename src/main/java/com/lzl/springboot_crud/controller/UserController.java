@@ -25,12 +25,13 @@ public class UserController {
     public void getUser(@RequestParam(value = "id",required = false) Integer id,
                         @RequestParam(value = "password",required = false) String password,
                         Map<String,Object> map){
-
+        //若为修改
         if(id!=null){
             User user = userService.findById(id);
             user.setRole(null);
             map.put("user",user);
         }
+
 
     }
     @RequestMapping("/users")

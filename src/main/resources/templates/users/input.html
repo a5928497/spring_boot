@@ -5,7 +5,7 @@
     <title>UserInput</title>
 </head>
 <body>
-    <form action="/user" method="post" modelAttribute="user">
+    <form action="/user" method="post" modelAttribute="user" id="inputForm">
         <label>Username:</label>
         <!--若为修改，加入用户id-->
         <input type="hidden" th:name="id" th:value="${user!=null}?${user.id}" />
@@ -15,14 +15,36 @@
         <input name="userName" type="text" th:value="${user!=null}?${user.userName}" /><br>
         <!--若为添加用户，需要用户填写密码-->
         <label th:if="${user==null}">密码：</label>
-        <input type="password" name="password" th:if="${user==null}"/><br>
+        <input type="password" id="password" name="password" th:if="${user==null}"/><br th:if="${user==null}">
+        <!--若为添加用户，需要用户填写密码确认-->
+        <label th:if="${user==null}">密码确认：</label>
+        <input type="password" id="pswConfirm" th:if="${user==null}"/><br th:if="${user==null}">
         <!--若为修改，默认选中用户角色-->
         <label>Role:</label>
         <select name="role.id" >
             <option th:each="role:${roles}" th:value="${role.id}" th:text="${role.roleName}"
                 th:selected="${user!= null}?${role.id == user.role.id}"    ></option>
         </select><br>
-        <input type="submit" value="Submit">
+        <button id="submit_BTN" >Submit</button>
     </form>
+    <script type="text/javascript" src="" th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
+    <script>
+        $submitBTN = $("#submit_BTN");
+        $password = $("#password");
+        $pswConfirm = $("#pswConfirm");
+        $form = $("#inputForm")
+        //提交前判定两次密码输入是否一致
+        $submitBTN.click(function () {
+            var isSame = $password.val() === $pswConfirm.val();
+            if(!isSame){
+            //若不一致
+                $pswConfirm.after("<br><span style='color: red'>两次密码输入必须一致</span>")
+            }else {
+                //若输入一致，提交
+                $form.submit();
+            }
+            return false;
+        })
+    </script>
 </body>
 </html>
