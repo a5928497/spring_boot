@@ -38,7 +38,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("/checkUsername")
     public String checkUsername(@RequestParam("username") String username) {
-        System.out.println(username);
+//        System.out.println(username);
         return userService.checkUsername(username) ;
     }
 

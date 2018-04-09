@@ -16,7 +16,7 @@ public class UserService {
 
     @Transactional
     public String checkUsername(String userName) {
-        System.out.println(userRepository.findByUserName(userName));
+//        System.out.println(userRepository.findByUserName(userName));
         return userRepository.findByUserName(userName);
     }
 
