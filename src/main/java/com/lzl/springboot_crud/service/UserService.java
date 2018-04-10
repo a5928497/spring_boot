@@ -15,6 +15,10 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
+    public User getByUsername(String userName) {
+        return userRepository.getByUserName(userName);
+    }
+    @Transactional
     public String checkUsername(String userName) {
 //        System.out.println(userRepository.findByUserName(userName));
         return userRepository.findByUserName(userName);
