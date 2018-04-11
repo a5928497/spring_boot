@@ -12,6 +12,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam("username")String username,@RequestParam("password") String password){
         //获取subject
+
         Subject currentUser = SecurityUtils.getSubject();
         //验证用户是否已经登录
         if(!currentUser.isAuthenticated()){
