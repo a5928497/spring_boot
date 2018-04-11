@@ -15,17 +15,16 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager manager){
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
-        System.out.println("hello");
         bean.setSecurityManager( manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/index.html");
         bean.setSuccessUrl("/users");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-        filterChainDefinitionMap.put("index", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/login", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/logout*","anon");
         filterChainDefinitionMap.put("/error/*.html","anon");
-        filterChainDefinitionMap.put("/*", "anon");//表示需要认证才可以访问
+//        filterChainDefinitionMap.put("/*", "anon");//表示需要认证才可以访问
 //        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
 //        filterChainDefinitionMap.put("/*.*", "authc");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
