@@ -58,11 +58,11 @@
 			<version>1.3.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-web -->
-		<dependency>
+<!--		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
 			<version>1.3.2</version>
-		</dependency>
+		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
