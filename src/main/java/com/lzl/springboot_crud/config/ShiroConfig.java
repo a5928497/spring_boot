@@ -13,9 +13,9 @@ import java.util.LinkedHashMap;
 @Configuration
 public class ShiroConfig {
     @Bean
-    public ShiroFilterFactoryBean (@Qualifier("securityManager") SecurityManager manager){
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager manager){
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
-        bean.setSecurityManager(manager);
+        bean.setSecurityManager( manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/login");
         bean.setSuccessUrl("/users");
@@ -51,7 +51,7 @@ public class ShiroConfig {
 
     //加入注解的使用，不加入这个注解不生效
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(org.apache.shiro.mgt.SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
