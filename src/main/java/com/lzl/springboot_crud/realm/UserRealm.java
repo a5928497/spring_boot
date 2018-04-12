@@ -17,29 +17,6 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
 
-    //用于授权的方法
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        //1. 从 principalCollection 中来获取登录用户的信息
-        Object principal = principalCollection.getPrimaryPrincipal();
-        //2. 利用登录的用户的信息来当前用户的角色或权限(可能需要查询数据库)
-        User user = userService.getByUsername((String) principal);
-        Set<String> roles = new HashSet<>();
-        roles.add(user.getRole().getRoleName());
-//        if("admin".equals(user.getRole().getRoleName())){
-//            roles.add("admin");
-//        }
-
-        //3. 创建 SimpleAuthorizationInfo, 并设置其 reles 属性.
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
-//        for (Permission permission:role.getPermissions()) {
-//            //添加权限
-//            simpleAuthorizationInfo.addStringPermission(permission.getPermission());
-//        }
-
-        //4. 返回 SimpleAuthorizationInfo 对象.
-        return info;
-    }
     //用于认证的方法
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -65,6 +42,29 @@ public class UserRealm extends AuthorizingRealm {
         String realmName = getName();
         ByteSource credentialsSalt = ByteSource.Util.bytes(username);
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
+        return info;
+    }
+    //用于授权的方法
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        //1. 从 principalCollection 中来获取登录用户的信息
+        Object principal = principalCollection.getPrimaryPrincipal();
+        //2. 利用登录的用户的信息来当前用户的角色或权限(可能需要查询数据库)
+        User user = userService.getByUsername((String) principal);
+        Set<String> roles = new HashSet<>();
+        roles.add(user.getRole().getRoleName());
+//        if("admin".equals(user.getRole().getRoleName())){
+//            roles.add("admin");
+//        }
+
+        //3. 创建 SimpleAuthorizationInfo, 并设置其 reles 属性.
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
+//        for (Permission permission:role.getPermissions()) {
+//            //添加权限
+//            simpleAuthorizationInfo.addStringPermission(permission.getPermission());
+//        }
+
+        //4. 返回 SimpleAuthorizationInfo 对象.
         return info;
     }
 }
