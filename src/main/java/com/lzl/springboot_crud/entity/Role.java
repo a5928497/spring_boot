@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Table(name = "ROLES")
 @Entity
 public class Role {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Integer id;
     @Column(name = "ROLE_NAME")
