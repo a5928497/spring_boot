@@ -1,9 +1,12 @@
 package com.lzl.springboot_crud.config;
 
 import com.lzl.springboot_crud.realm.UserRealm;
+import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +48,19 @@ public class ShiroConfig {
     public UserRealm userRealm() {
         UserRealm userRealm = new UserRealm();
         return userRealm;
+    }
+
+    //配置Cookies
+    public SimpleCookie rememberCookies(){
+        SimpleCookie simpleCookie = new SimpleCookie();
+        return null;
+    }
+
+    //配置RememberMe管理器
+    @Bean
+    public RememberMeManager rememberMeManager() {
+        RememberMeManager rememberMeManager = new CookieRememberMeManager();
+        return null;
     }
 
     //加入注解的使用，不加入这个注解不生效

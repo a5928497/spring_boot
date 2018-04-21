@@ -16,6 +16,7 @@ public class LoginController {
 
         Subject currentUser = SecurityUtils.getSubject();
         //验证用户是否已经登录
+
         if(!currentUser.isAuthenticated()){
             //把用户名密码封装为Token对象
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
