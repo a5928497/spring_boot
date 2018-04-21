@@ -5,7 +5,7 @@ import java.util.Date;
 @Table(name = "USERS")
 @Entity
 public class User {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Integer id;
 
