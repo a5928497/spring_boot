@@ -2,6 +2,8 @@ package com.lzl.springboot_crud.service;
 
 import com.lzl.springboot_crud.entity.User;
 import com.lzl.springboot_crud.repository.UserRepository;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,9 @@ public class UserService {
 
     @Transactional
     public void saveUser(User user){
+        Object salt = ByteSource.Util.bytes(user.getUserName());;
+        Object result = new SimpleHash("MD5", user.getPassword(), salt, 1024);
+        user.setPassword(result.toString());
         userRepository.saveAndFlush(user);
     }
 

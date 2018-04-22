@@ -26,7 +26,7 @@ public class LoginController {
                 //执行登录
                 currentUser.login(usernamePasswordToken);
             }catch (AuthenticationException ae){
-                System.out.println("登陆失败");
+                System.out.println("登陆失败:"+ae.toString());
             }
 
         }

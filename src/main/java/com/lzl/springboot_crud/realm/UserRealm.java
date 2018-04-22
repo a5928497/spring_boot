@@ -3,8 +3,11 @@ package com.lzl.springboot_crud.realm;
 import com.lzl.springboot_crud.entity.User;
 import com.lzl.springboot_crud.service.UserService;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -16,6 +19,12 @@ import java.util.Set;
 public class UserRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
+    private HashedCredentialsMatcher matcher;
+    {
+        matcher = new HashedCredentialsMatcher();
+        matcher.setHashAlgorithmName("MD5");
+        matcher.setHashIterations(1024);
+    }
 
     //用于认证的方法
     @Override
@@ -24,23 +33,25 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
         //2. 从 UsernamePasswordToken 中来获取 username
         String username = upToken.getUsername();
-        System.out.println(username+"realm");
+        System.out.println(username+":realm");
         //3. 从数据库获取username准备进行比对
         String _username = userService.checkUsername(username);
-//      // 4. 异常用户处理
-//        if("unknown".equals(username)){
-//            throw new UnknownAccountException("用户不存在!");
-//        }
-//
-//        //5. 根据用户信息的情况, 决定是否需要抛出其他的 AuthenticationException 异常.
-//        if("monster".equals(username)){
-//            throw new LockedAccountException("用户被锁定");
-//        }
+        //4. 异常用户处理
+        if(_username == null){
+            throw new UnknownAccountException("用户不存在!");
+        }
+
+        //5. 根据用户信息的情况, 决定是否需要抛出其他的 AuthenticationException 异常.
+        if(userService.getByUsername(_username).getRole().getRoleName().equals("block")){
+            throw new LockedAccountException("用户被锁定");
+        }
         //6. 根据用户的情况, 来构建 AuthenticationInfo 对象并返回. 通常使用的实现类为: SimpleAuthenticationInfo
         Object principal = username;
-        Object credentials = upToken.getCredentials();
-        String realmName = getName();
         ByteSource credentialsSalt = ByteSource.Util.bytes(username);
+        Object credentials = new SimpleHash("MD5", upToken.getCredentials(),credentialsSalt, 1024);
+        System.out.println(credentials);
+        String realmName = getName();
+
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
         return info;
     }
@@ -66,5 +77,23 @@ public class UserRealm extends AuthorizingRealm {
 
         //4. 返回 SimpleAuthorizationInfo 对象.
         return info;
+    }
+
+    //配置MD5校验
+
+    @Override
+    public void setCredentialsMatcher(CredentialsMatcher matcher) {
+        matcher = this.matcher;
+        super.setCredentialsMatcher(matcher);
+    }
+
+    public static void main(String[] args) {
+        String hashAlgorithmName = "MD5";
+        Object credentials = "123";
+        Object salt = ByteSource.Util.bytes("feili");;
+        int hashIterations = 1024;
+
+        Object result = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
+        System.out.println(result);
     }
 }
