@@ -1,6 +1,7 @@
 package com.lzl.springboot_crud.config;
 
 import com.lzl.springboot_crud.realm.UserRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -43,11 +44,21 @@ public class ShiroConfig {
         manager.setRealm(userRealm);
         return manager;
     }
-
+    //配置MD5验证器
+    @Bean(name = "hashedCredentialsMatcher")
+    public HashedCredentialsMatcher getHashedCredentialsMatcher() {
+        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+        credentialsMatcher.setHashAlgorithmName("MD5");
+        credentialsMatcher.setHashIterations(1024);
+        credentialsMatcher.setStoredCredentialsHexEncoded(true);
+        return credentialsMatcher;
+    }
     //配置自定义的权限登录器
     @Bean(name="userRealm")
     public UserRealm userRealm() {
         UserRealm userRealm = new UserRealm();
+        //加入MD5验证器
+        userRealm.setCredentialsMatcher(getHashedCredentialsMatcher());
         return userRealm;
     }
 

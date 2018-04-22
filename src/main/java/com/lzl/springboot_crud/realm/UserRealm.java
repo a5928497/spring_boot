@@ -19,12 +19,6 @@ import java.util.Set;
 public class UserRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
-    private HashedCredentialsMatcher matcher;
-    {
-        matcher = new HashedCredentialsMatcher();
-        matcher.setHashAlgorithmName("MD5");
-        matcher.setHashIterations(1024);
-    }
 
     //用于认证的方法
     @Override
@@ -49,7 +43,6 @@ public class UserRealm extends AuthorizingRealm {
         Object principal = username;
         ByteSource credentialsSalt = ByteSource.Util.bytes(username);
         Object credentials = new SimpleHash("MD5", upToken.getCredentials(),credentialsSalt, 1024);
-        System.out.println(credentials);
         String realmName = getName();
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
@@ -79,13 +72,6 @@ public class UserRealm extends AuthorizingRealm {
         return info;
     }
 
-    //配置MD5校验
-
-    @Override
-    public void setCredentialsMatcher(CredentialsMatcher matcher) {
-        matcher = this.matcher;
-        super.setCredentialsMatcher(matcher);
-    }
 
     public static void main(String[] args) {
         String hashAlgorithmName = "MD5";
