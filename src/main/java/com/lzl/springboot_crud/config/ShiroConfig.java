@@ -2,6 +2,7 @@ package com.lzl.springboot_crud.config;
 
 import com.lzl.springboot_crud.realm.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -67,18 +68,20 @@ public class ShiroConfig {
 
     //配置Cookies
     @Bean
-    public SimpleCookie rememberCookies(){
+    public SimpleCookie rememberCookie(){
         SimpleCookie cookie = new SimpleCookie("rememberMe");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(31536000);
-        return null;
+        return cookie;
     }
 
     //配置RememberMe管理器
     @Bean
     public RememberMeManager rememberMeManager() {
-        RememberMeManager rememberMeManager = new CookieRememberMeManager();
-        return null;
+        CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
+        rememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
+        rememberMeManager.setCookie(rememberCookie());
+        return rememberMeManager;
     }
 
     //加入注解的使用，不加入这个注解不生效
