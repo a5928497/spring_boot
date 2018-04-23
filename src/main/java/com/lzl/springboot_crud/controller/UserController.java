@@ -3,6 +3,8 @@ package com.lzl.springboot_crud.controller;
 import com.lzl.springboot_crud.entity.User;
 import com.lzl.springboot_crud.service.RoleService;
 import com.lzl.springboot_crud.service.UserService;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +58,9 @@ public class UserController {
     @PostMapping("/user")
     public String addUser(User user){
         user.setCreateTime(new Date());
+        Object salt = ByteSource.Util.bytes(user.getUserName());;
+        Object result = new SimpleHash("MD5", user.getPassword(), salt, 1024);
+        user.setPassword(result.toString());
         System.out.println(user);
         userService.saveUser(user);
         return "redirect:/users";
