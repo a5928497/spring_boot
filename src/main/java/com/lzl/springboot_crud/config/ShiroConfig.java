@@ -29,9 +29,12 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/logout","logout");
         filterChainDefinitionMap.put("/error/*.html","anon");
+        filterChainDefinitionMap.put("/roles/*","roles[admin]");
+        filterChainDefinitionMap.put("/roles/*.*","roles[admin]");
+        filterChainDefinitionMap.put("/roles/**","roles[admin]");
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
-//        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
-//        filterChainDefinitionMap.put("/*.*", "authc");
+        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
+        filterChainDefinitionMap.put("/*.*", "authc");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
