@@ -2,17 +2,26 @@ package com.lzl.springboot_crud.config;
 
 import com.lzl.springboot_crud.realm.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
+import org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import java.util.LinkedHashMap;
 
@@ -42,10 +51,11 @@ public class ShiroConfig {
 
     //配置核心安全事务管理器
     @Bean(name="securityManager")
-    public DefaultWebSecurityManager securityManager(@Qualifier("userRealm") UserRealm userRealm) {
+    public DefaultWebSecurityManager securityManager() {
         System.err.println("--------------shiro已经加载----------------");
         DefaultWebSecurityManager manager=new DefaultWebSecurityManager();
-        manager.setRealm(userRealm);
+        manager.setRememberMeManager(rememberMeManager());
+        manager.setRealm(userRealm());
         return manager;
     }
     //配置MD5验证器
@@ -82,6 +92,73 @@ public class ShiroConfig {
         rememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
         rememberMeManager.setCookie(rememberCookie());
         return rememberMeManager;
+    }
+    //配置缓存管理器
+    @Bean(name = "cacheShiroManager")
+    public CacheManager CacheManage() {
+        return new EhCacheManager();
+    }
+
+    @Bean(name = "lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor LifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+    @Bean(name = "sessionValidationScheduler")
+    public ExecutorServiceSessionValidationScheduler ExecutorServiceSessionValidationScheduler() {
+        ExecutorServiceSessionValidationScheduler scheduler = new ExecutorServiceSessionValidationScheduler();
+        scheduler.setInterval(900000);
+        return scheduler;
+    }
+
+    //配置sessionCookie
+    @Bean(name = "sessionIdCookie")
+    public SimpleCookie SessionIdCookie() {
+        SimpleCookie cookie = new SimpleCookie("sid");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(-1);
+        return cookie;
+    }
+
+    //配置sessionManager
+    @Bean(name = "sessionManager")
+    public DefaultWebSessionManager SessionManage() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setGlobalSessionTimeout(1800000);
+        sessionManager.setSessionValidationScheduler(ExecutorServiceSessionValidationScheduler());
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        sessionManager.setDeleteInvalidSessions(true);
+        sessionManager.setSessionIdCookieEnabled(true);
+        sessionManager.setSessionIdCookie(SessionIdCookie());
+        EnterpriseCacheSessionDAO cacheSessionDAO = new EnterpriseCacheSessionDAO();
+        cacheSessionDAO.setCacheManager(CacheManage());
+        sessionManager.setSessionDAO(cacheSessionDAO);
+        // -----可以添加session 创建、删除的监听器
+
+        return sessionManager;
+    }
+
+    @Bean
+    public MethodInvokingFactoryBean getMethodInvokingFactoryBean(){
+        MethodInvokingFactoryBean factoryBean = new MethodInvokingFactoryBean();
+        factoryBean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
+        factoryBean.setArguments(new Object[]{securityManager()});
+        return factoryBean;
+    }
+
+    @Bean
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator AutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
+        creator.setProxyTargetClass(true);
+        return creator;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor AuthorizationAttributeSourceAdvisor(){
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager());
+        return advisor;
     }
 
     //加入注解的使用，不加入这个注解不生效
