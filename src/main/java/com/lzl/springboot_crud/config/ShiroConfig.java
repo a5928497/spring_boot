@@ -1,5 +1,6 @@
 package com.lzl.springboot_crud.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.lzl.springboot_crud.realm.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
@@ -76,7 +77,7 @@ public class ShiroConfig {
         return userRealm;
     }
 
-    //配置Cookies
+    //配置rememberCookie
     @Bean
     public SimpleCookie rememberCookie(){
         SimpleCookie cookie = new SimpleCookie("rememberMe");
@@ -93,7 +94,7 @@ public class ShiroConfig {
         rememberMeManager.setCookie(rememberCookie());
         return rememberMeManager;
     }
-    //配置缓存管理器
+    //配置缓存管理器，管理用户验证Cache
     @Bean(name = "cacheShiroManager")
     public CacheManager CacheManage() {
         return new EhCacheManager();
@@ -104,10 +105,19 @@ public class ShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
+    @Bean
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator AutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
+        creator.setProxyTargetClass(true);
+        return creator;
+    }
+
+    //配置会话验证调度器，每15分钟执行一次验证
     @Bean(name = "sessionValidationScheduler")
     public ExecutorServiceSessionValidationScheduler ExecutorServiceSessionValidationScheduler() {
         ExecutorServiceSessionValidationScheduler scheduler = new ExecutorServiceSessionValidationScheduler();
-        scheduler.setInterval(900000);
+        scheduler.setInterval(15 * 60 *1000);
         return scheduler;
     }
 
@@ -147,18 +157,16 @@ public class ShiroConfig {
     }
 
     @Bean
-    @DependsOn("lifecycleBeanPostProcessor")
-    public DefaultAdvisorAutoProxyCreator AutoProxyCreator(){
-        DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
-        creator.setProxyTargetClass(true);
-        return creator;
-    }
-
-    @Bean
     public AuthorizationAttributeSourceAdvisor AuthorizationAttributeSourceAdvisor(){
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(securityManager());
         return advisor;
+    }
+
+    //配置thymeleaf支持
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 
     //加入注解的使用，不加入这个注解不生效

@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+>
 <head>
     <meta charset="UTF-8">
     <title>AllUsers</title>
 </head>
 <body>
+    <!-- 引入welcome片段-->
+    <div th:replace="commons/user_welcome::user_welcome"></div>
     <a href="/user">
         <button>Add User</button>
     </a>
-    <a href="/roles">
-        <button>Roles</button>
-    </a>
+    <shiro:hasRole name="admin">
+        <a href="/roles">
+            <button>Roles</button>
+        </a>
+    </shiro:hasRole>
     <a href="/logout">
         <button>Logout</button>
     </a>
