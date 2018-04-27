@@ -12,9 +12,11 @@ import redis.clients.jedis.Jedis;
 @SpringBootTest
 public class SpringbootCrudApplicationTests {
 
+	@Autowired
+	private Jedis jedis;
+
 	@Test
 	public void redisTest() {
-		Jedis jedis = new Jedis("192.168.88.246",6379);
 		System.out.println(jedis.ping());
 	}
 
